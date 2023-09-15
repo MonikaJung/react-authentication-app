@@ -1,6 +1,6 @@
 Simple react project with user authorization, log in and log out feature.
 
-Project goal: working with side effects and useEffect() function.
+Project goal: working with useEffect(), useReducer() and useContext() React Hooks.
 
 To make the app work:
 1. Clone the repository
