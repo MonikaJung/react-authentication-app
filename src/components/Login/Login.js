@@ -51,12 +51,12 @@ const Login = () => {
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      console.log("Validation");
+      //console.log("Validation");
       setFormIsValid(emailState.isValid && passwordState.isValid);
     }, 500);
 
     return () => {
-      console.log("Clean");
+      //console.log("Clean");
       clearTimeout(timer);
     };
   }, [emailState.isValid, passwordState.isValid]);
@@ -82,18 +82,21 @@ const Login = () => {
   };
 
   const ctx = useContext(AuthContext);
+  const emailInputRef = React.useRef();
+  const passwordInputRef = React.useRef();
 
   const submitHandler = (event) => {
     event.preventDefault();
-    ctx.onLogin(emailState.value, passwordState.value);
-    dispatchEmail({ type: "clear" });
-    dispatchPassword({ type: "clear" });
+    if (formIsValid) ctx.onLogin(emailState.value, passwordState.value);
+    else if (!emailState.isValid) emailInputRef.current.focusInput();
+    else passwordInputRef.current.focusInput();
   };
 
   return (
     <Card className={classes.login}>
       <form onSubmit={submitHandler}>
         <Input
+          ref={emailInputRef}
           isValid={emailState.isValid}
           id="email"
           label="E-Mail"
@@ -103,6 +106,7 @@ const Login = () => {
           onBlur={validateEmailHandler}
         />
         <Input
+          ref={passwordInputRef}
           isValid={passwordState.isValid}
           id="password"
           label="Password"
@@ -112,7 +116,7 @@ const Login = () => {
           onBlur={validatePasswordHandler}
         />
         <div className={classes.actions}>
-          <Button type="submit" className={classes.btn} disabled={!formIsValid}>
+          <Button type="submit" className={classes.btn}>
             Login
           </Button>
         </div>
